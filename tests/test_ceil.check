@@ -1,0 +1,22 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test ceil_1
+for(double i = -10; i < 10; i+= 0.1)
+    ck_assert_double_eq(ceil(i),s21_ceil(i));
+
+#test ceil_2
+for(double i = -4.449; i < 4.501; i+= 0.001)
+    ck_assert_double_eq_tol(ceil(i),s21_ceil(i), PRECISION_test);
+
+#test ceil_3
+long double x = NAN;
+ck_assert_ldouble_nan(s21_ceil(x));
+
+#test ceil_4
+double x = S21_INF;
+ck_assert_double_eq(ceil(x), s21_ceil(x));
+
+#test ceil_5
+double x = S21_NEG_INF;
+ck_assert_double_eq(ceil(x), s21_ceil(x));

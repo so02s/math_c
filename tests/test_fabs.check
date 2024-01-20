@@ -1,0 +1,21 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test fabs_1
+for(double i = -10; i < 10; i+= 0.5){
+ck_assert_double_eq(fabs(i),s21_fabs(i));}
+
+#test fabs_2
+for(double i = -1; i < 1; i+= 0.05){
+ck_assert_double_eq_tol(fabs(i),s21_fabs(i), PRECISION_test);}
+
+#test fabs_3
+ck_assert_int_eq(isnan(fabs(NAN)), isnan(s21_fabs(NAN)));
+
+#test fabs_4
+double x = S21_INF;
+ck_assert_double_eq(fabs(x), s21_fabs(x));
+
+#test fabs_5
+double x = S21_NEG_INF;
+ck_assert_double_eq(fabs(x), s21_fabs(x));

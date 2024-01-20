@@ -1,0 +1,14 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test acos1_errors
+ck_assert_int_eq(isnan(acos(2)), isnan(s21_acos(2)));
+ck_assert_int_eq(isnan(acos(-1.1)), isnan(s21_acos(-1.1)));
+ck_assert_int_eq(isnan(acos(NAN)), isnan(s21_acos(NAN)));
+ck_assert_double_eq_tol(acos(0), s21_acos(0), PRECISION_test);
+ck_assert_double_eq_tol(acos(-0), s21_acos(-0), PRECISION_test);
+ck_assert_double_eq_tol(acos(1), s21_acos(1), PRECISION_test);
+
+#test acos2_value
+for(double n1 = -0.99; n1 < 1; n1+=0.1)
+    ck_assert_double_eq_tol(acos(n1), s21_acos(n1), PRECISION_test);

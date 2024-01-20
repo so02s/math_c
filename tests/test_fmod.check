@@ -1,0 +1,32 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test fmod1_nan
+double x = 0, y = 0;
+ck_assert_int_eq(isnan(fmod(x, y)), isnan(s21_fmod(x, y)));
+x = S21_INF;
+y = 2;
+ck_assert_int_eq(isnan(fmod(x, y)), isnan(s21_fmod(x, y)));
+ck_assert_int_eq(isnan(fmod(-x, y)), isnan(s21_fmod(-x, y)));
+x = 2;
+y = 0;
+ck_assert_int_eq(isnan(fmod(x, y)), isnan(s21_fmod(x, y)));
+ck_assert_int_eq(isnan(fmod(x, -y)), isnan(s21_fmod(x, -y)));
+ck_assert_int_eq(isnan(fmod(NAN, NAN)), isnan(s21_fmod(NAN, NAN)));
+
+#test fmod2_errors
+double x = 0, y = 2;
+ck_assert_double_eq(fmod(x, y), s21_fmod(x, y));
+x = -0;
+y = 2;
+ck_assert_double_eq(fmod(x, y), s21_fmod(x, y));
+ck_assert_double_eq(fmod(2, S21_INF), s21_fmod(2, S21_INF));
+ck_assert_double_eq(fmod(2, -S21_INF), s21_fmod(2, -S21_INF));
+
+#test fmod3_value
+for(double n1 = 0.99; n1 < 5; n1+=0.1)
+    ck_assert_double_eq_tol(fmod(n1, 2), s21_fmod(n1, 2), PRECISION_test);
+
+#test fmod3_huge_value
+for(double n1 = 40.99; n1 < 60; n1+=3.1)
+    ck_assert_double_eq_tol(fmod(n1, 3), s21_fmod(n1, 3), PRECISION_test);

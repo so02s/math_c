@@ -1,0 +1,127 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test pow1_low_int
+int n1 = -5, n2 = -5;
+for(int i = 0; i < 11; i++)
+    for(int j = 0; j < 11; j++){
+        if(isinf(pow(n1+i, n2+j)))
+            ck_assert_int_eq(isinf(pow(n1+i, n2+j)), isinf(s21_pow(n1+i, n2+j)));
+        else
+            ck_assert_double_eq_tol(pow(n1+i, n2+j), s21_pow(n1+i, n2+j), PRECISION_test);
+        if(isinf(pow(n1+j, n2+i)))
+            ck_assert_int_eq(isinf(pow(n1+j, n2+i)), isinf(s21_pow(n1+j, n2+i)));
+        else
+            ck_assert_double_eq_tol(pow(n1+j, n2+i), s21_pow(n1+j, n2+i), PRECISION_test);
+    }
+//===========================
+#test pow2_high_int
+int n1 = -20, n2 = -20;
+for(int i = 0; i < 11; i+=10)
+    for(int j = 0; j < 11; j+=10){
+        if(!isnan(pow(n1+i, n2+j)))
+            ck_assert_double_eq_tol(pow(n1+i, n2+j), s21_pow(n1+i, n2+j), PRECISION_test);
+        else
+            ck_assert_double_eq(isnan(pow(n1+i, n2+j)), isnan(s21_pow(n1+i, n2+j)));
+        if(!isnan(pow(n1+j, n2+i)))
+            ck_assert_double_eq_tol(pow(n1+j, n2+i), s21_pow(n1+j, n2+i), PRECISION_test);
+        else
+            ck_assert_double_eq(isnan(pow(n1+j, n2+i)), isnan(s21_pow(n1+j, n2+i)));
+    }
+
+#test pow3_low_frac
+double n1 = -0.99, n2 = -0.99;
+for(double i = 0; i < 2; i+=0.1)
+    for(double j = 0; j < 2; j+=0.1){
+        if(!isnan(pow(n1+i, n2+j)))
+            ck_assert_double_eq_tol(pow(n1+i, n2+j), s21_pow(n1+i, n2+j), PRECISION_test);
+        else
+            ck_assert_double_eq(isnan(pow(n1+i, n2+j)), isnan(s21_pow(n1+i, n2+j)));
+        if(!isnan(pow(n1+j, n2+i)))
+            ck_assert_double_eq_tol(pow(n1+j, n2+i), s21_pow(n1+j, n2+i), PRECISION_test);
+        else
+            ck_assert_double_eq(isnan(pow(n1+j, n2+i)), isnan(s21_pow(n1+j, n2+i)));
+    }
+
+#test pow3_high_frac
+double n1 = -6.99, n2 = -6.99;
+for(int i = 0; i < 4; i+=3.1)
+    for(int j = 0; j < 4; j+=3.1){
+        if(!isnan(pow(n1+i, n2+j)))
+            ck_assert_double_eq_tol(pow(n1+i, n2+j), s21_pow(n1+i, n2+j), PRECISION_test);
+        else
+            ck_assert_double_eq(isnan(pow(n1+i, n2+j)), isnan(s21_pow(n1+i, n2+j)));
+        if(!isnan(pow(n1+j, n2+i)))
+            ck_assert_double_eq_tol(pow(n1+j, n2+i), s21_pow(n1+j, n2+i), PRECISION_test);
+        else
+            ck_assert_double_eq(isnan(pow(n1+j, n2+i)), isnan(s21_pow(n1+j, n2+i)));
+    }
+
+#test pow4_nan
+ck_assert_double_eq(isnan(pow(NAN, 1)), isnan(s21_pow(S21_NAN, 1)));
+ck_assert_double_eq(isnan(pow(NAN, NAN)), isnan(s21_pow(S21_NAN, S21_NAN)));
+ck_assert_double_eq(pow(1, NAN), s21_pow(1, S21_NAN));
+
+#test pow5_inf
+ck_assert_double_eq(pow(1, S21_INF), s21_pow(1, S21_INF));
+ck_assert_double_eq(pow(1, -S21_INF), s21_pow(1, -S21_INF));
+ck_assert_double_eq(pow(S21_INF, S21_INF), s21_pow(S21_INF, S21_INF));
+ck_assert_double_eq(pow(S21_INF, -S21_INF), s21_pow(S21_INF, -S21_INF));
+ck_assert_double_eq(pow(-S21_INF, S21_INF), s21_pow(-S21_INF, S21_INF));
+ck_assert_double_eq(pow(-S21_INF, -S21_INF), s21_pow(-S21_INF, -S21_INF));
+ck_assert_double_eq(pow(S21_INF, 1), s21_pow(S21_INF, 1));
+ck_assert_double_eq(pow(-S21_INF, 1), s21_pow(-S21_INF, 1));
+
+#test all_cases
+ck_assert_double_eq(pow(0.0,-4),s21_pow(0.0,-4));
+ck_assert_double_eq(pow(-0.0,-4),s21_pow(-0.0,-4));
+ck_assert_double_eq(pow(-0.0,-4.1),s21_pow(-0.0,-4.1));
+ck_assert_double_eq(pow(0.0,-5.3),s21_pow(0.0,-5.3));
+ck_assert_double_eq(pow(-0.0,-5.4),s21_pow(-0.0,-5.4));
+ck_assert_int_eq(isnan(pow(0.0,NAN)),isnan(s21_pow(0.0,S21_NAN)));
+ck_assert_int_eq(isnan(pow(-0.0,NAN)),isnan(s21_pow(-0.0,S21_NAN)));
+ck_assert_double_eq(pow(0.0,-S21_INF),s21_pow(0.0,-S21_INF));
+ck_assert_double_eq(pow(-0.0,-S21_INF),s21_pow(-0.0,-S21_INF));
+ck_assert_double_eq(pow(0.0,4),s21_pow(0.0,4));
+ck_assert_double_eq(pow(-0.0,4),s21_pow(-0.0,4));
+ck_assert_double_eq(pow(0.0,3),s21_pow(0.0,3));
+ck_assert_double_eq(pow(-0.0,3),s21_pow(-0.0,3));
+
+ck_assert_double_eq(pow(-1,S21_INF),s21_pow(-1,S21_INF));
+ck_assert_double_eq(pow(-1,-S21_INF),s21_pow(-1,-S21_INF));
+ck_assert_double_eq(pow(1,10),s21_pow(1,10));
+ck_assert_double_eq(pow(1,NAN),s21_pow(1,S21_NAN));
+ck_assert_double_eq(pow(1,S21_INF),s21_pow(1,S21_INF));
+ck_assert_double_eq(pow(1,-S21_INF),s21_pow(1,-S21_INF));
+ck_assert_double_eq(pow(-1,0.0),s21_pow(-1,0.0));
+ck_assert_double_eq(pow(-1,-0.0),s21_pow(-1,-0.0));
+
+ck_assert_double_eq(pow(S21_INF,0.0),s21_pow(S21_INF,0.0));
+ck_assert_double_eq(pow(S21_INF,-0.0),s21_pow(S21_INF,-0.0));
+ck_assert_double_eq(pow(NAN,0.0),s21_pow(S21_NAN,0.0));
+ck_assert_double_eq(pow(NAN,-0.0),s21_pow(S21_NAN,-0.0));
+ck_assert_int_eq(isnan(pow(-4,NAN)),isnan(s21_pow(-4,S21_NAN)));
+
+ck_assert_double_eq(pow(0.4,-S21_INF),s21_pow(0.4,-S21_INF));
+ck_assert_double_eq(pow(-0.4,-S21_INF),s21_pow(-0.4,-S21_INF));
+ck_assert_double_eq(pow(4,-S21_INF),s21_pow(4,-S21_INF));
+ck_assert_double_eq(pow(-6,-S21_INF),s21_pow(-6,-S21_INF));
+ck_assert_double_eq(pow(0.4,S21_INF),s21_pow(0.4,S21_INF));
+ck_assert_double_eq(pow(-0.4,S21_INF),s21_pow(-0.4,S21_INF));
+ck_assert_double_eq(pow(4,S21_INF),s21_pow(4,S21_INF));
+ck_assert_double_eq(pow(-6,S21_INF),s21_pow(-6,S21_INF));
+
+ck_assert_double_eq(pow(-S21_INF,-12),s21_pow(-S21_INF,-12));
+ck_assert_int_eq(isnan(pow(-S21_INF,-NAN)),isnan(s21_pow(-S21_INF,-S21_NAN)));
+ck_assert_double_eq(pow(-S21_INF,-3),s21_pow(-S21_INF,-3));
+ck_assert_double_eq(pow(-S21_INF,2),s21_pow(-S21_INF,2));
+ck_assert_int_eq(isnan(pow(-S21_INF,NAN)),isnan(s21_pow(-S21_INF,S21_NAN)));
+ck_assert_double_eq(pow(-S21_INF,3),s21_pow(-S21_INF,3));
+ck_assert_double_eq(pow(S21_INF,-3),s21_pow(S21_INF,-3));
+ck_assert_double_eq(pow(S21_INF,3),s21_pow(S21_INF,3));
+ck_assert_int_eq(isnan(pow(NAN,-3)),isnan(s21_pow(S21_NAN,-3)));
+ck_assert_int_eq(isnan(pow(-NAN,-3)),isnan(s21_pow(-S21_NAN,-3)));
+ck_assert_int_eq(isnan(pow(4,NAN)),isnan(s21_pow(4,S21_NAN)));
+ck_assert_int_eq(isnan(pow(4,-NAN)),isnan(s21_pow(4,-S21_NAN)));
+
+

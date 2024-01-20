@@ -1,0 +1,17 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test asin1_outrange
+ck_assert_int_eq(isnan(asin(2)), isnan(s21_asin(2)));
+ck_assert_int_eq(isnan(asin(-1.1)), isnan(s21_asin(-1.1)));
+
+#test asin2_nan
+ck_assert_int_eq(isnan(asin(NAN)), isnan(s21_asin(NAN)));
+
+#test asin3_errors
+ck_assert_double_eq(asin(0), s21_asin(0));
+ck_assert_double_eq(asin(-0), s21_asin(-0));
+
+#test asin4_value
+for(double n1 = -0.99; n1 < 1; n1+=0.1)
+    ck_assert_double_eq_tol(asin(n1), s21_asin(n1), PRECISION_test);

@@ -1,0 +1,42 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test exp1_low_int
+int n1 = -5;
+long double val1, val2;
+for(int i = 0; i < 11; i++){
+    val1 = exp(n1+i);
+    val2 = s21_exp(n1+i);
+    ck_assert_double_eq_tol(val1, val2, PRECISION_test);
+}
+
+#test exp2_high_int
+int n1 = -60;
+long double val1, val2;
+for(int i = 0; i < 11; i+=10){
+    val1 = exp(n1+i);
+    val2 = s21_exp(n1+i);
+    ck_assert_double_eq_tol(val1, val2, PRECISION_test);
+}
+
+#test exp3_low_frac
+for(double i = -0.99; i < 2.0; i+=0.1)
+    ck_assert_double_eq_tol(exp(i), s21_exp(i), PRECISION_test);
+
+#test exp4_high_frac
+double n1 = -6.99;
+long double val1, val2;
+for(int i = 0; i < 4; i+=3.1){
+    val1 = exp(n1+i);
+    val2 = s21_exp(n1+i);
+    ck_assert_double_eq_tol(val1, val2, PRECISION_test);
+}
+
+#test exp4_nan
+ck_assert_double_eq(isnan(exp(NAN)), isnan(s21_exp(S21_NAN)));
+
+#test exp5_inf
+ck_assert_double_eq(exp(S21_INF), s21_exp(S21_INF));
+ck_assert_double_eq(exp(-S21_INF), s21_exp(-S21_INF));
+ck_assert_double_eq(exp(0), s21_exp(0));
+ck_assert_double_eq(exp(-0), s21_exp(-0));

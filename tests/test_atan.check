@@ -1,0 +1,31 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test atan1_low_int
+for(int n1 = -5; n1 < 6; n1++)
+    ck_assert_double_eq_tol(atan(n1), s21_atan(n1), PRECISION_test);
+
+#test atan2_high_int
+for(int n1 = -50; n1 < -29; n1+=10){
+    ck_assert_double_eq_tol(atan(n1), s21_atan(n1), PRECISION_test);
+    ck_assert_double_eq_tol(atan(-n1), s21_atan(-n1), PRECISION_test);
+}
+
+#test atan3_low_frac
+for(double n1 = -0.99; n1 < 1; n1+=0.1)
+    ck_assert_double_eq_tol(atan(n1), s21_atan(n1), PRECISION_test);
+
+#test atan4_high_frac
+for(double n1 = -60.99; n1 < -40; n1+=3.1){
+    ck_assert_double_eq_tol(atan(n1), s21_atan(n1), PRECISION_test);
+    ck_assert_double_eq_tol(atan(-n1), s21_atan(-n1), PRECISION_test);
+}
+
+#test atan5_nan
+ck_assert_int_eq(isnan(atan(NAN)), isnan(s21_atan(NAN)));
+
+#test atan6_errors
+ck_assert_double_eq(atan(0), s21_atan(0));
+ck_assert_double_eq(atan(-0), s21_atan(-0));
+ck_assert_double_eq_tol(atan(S21_INF), s21_atan(S21_INF), PRECISION_test);
+ck_assert_double_eq_tol(atan(S21_NEG_INF), s21_atan(S21_NEG_INF), PRECISION_test);

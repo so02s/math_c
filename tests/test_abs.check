@@ -1,0 +1,6 @@
+#include <math.h>
+#include "s21_math.h"
+
+#test abs_1
+for(int i = -10; i < 10; i++)
+ck_assert_int_eq(abs(i),s21_abs(i));
